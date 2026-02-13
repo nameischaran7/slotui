@@ -1,5 +1,6 @@
 package com.example.s_book;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,9 +29,19 @@ public class VendorAdapter extends RecyclerView.Adapter<VendorAdapter.VendorView
     public void onBindViewHolder(@NonNull VendorViewHolder holder, int position) {
         Vendor vendor = vendorList.get(position);
         holder.name.setText(vendor.getName());
-        holder.category.setText(vendor.getCategory());
         holder.location.setText(vendor.getLocation());
         holder.price.setText("₹" + vendor.getPricePerHour() + "/hr");
+
+        // Handle the Click
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), SlotBookingActivity.class);
+
+            // Pass data to the next screen
+            intent.putExtra("VENDOR_ID", vendor.getId());
+            intent.putExtra("VENDOR_NAME", vendor.getName());
+
+            v.getContext().startActivity(intent);
+        });
     }
 
     @Override
