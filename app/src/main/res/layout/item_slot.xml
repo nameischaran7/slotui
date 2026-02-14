@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:text="Book Now"
-        android:backgroundTint="@color/purple_500" />
+        android:backgroundTint="@android:color/holo_green_light"
+        android:text="Book Now" />
 
 </RelativeLayout>

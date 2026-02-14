@@ -1,11 +1,11 @@
 package com.example.s_book;
 
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,10 +17,15 @@ public class SlotAdapter extends RecyclerView.Adapter<SlotAdapter.SlotViewHolder
 
     @NonNull
     @Override
-    public SlotViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
-    }
 
+    public SlotViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        // 1. Ensure the layout name matches your XML file exactly
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_slot, parent, false);
+
+        // 2. You MUST return a new instance of your ViewHolder
+        return new SlotViewHolder(view);
+    }
     @Override
     public void onBindViewHolder(@NonNull SlotViewHolder holder, int position) {
         Slot slot = slotList.get(position);
@@ -37,7 +42,7 @@ public class SlotAdapter extends RecyclerView.Adapter<SlotAdapter.SlotViewHolder
             });
         }
     }
-
+    
     @Override
     public int getItemCount() { return slotList.size(); }
 
