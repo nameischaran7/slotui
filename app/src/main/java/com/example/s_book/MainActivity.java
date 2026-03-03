@@ -1,5 +1,7 @@
 package com.example.s_book;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,12 +22,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        // Initialize RecyclerView
+        // Check if the user is actually logged in first
+        SharedPreferences pref = getSharedPreferences("SBook_Prefs", MODE_PRIVATE);
+        boolean isLoggedIn = pref.getBoolean("isLoggedIn", false);
+
+        if (!isLoggedIn) {
+            // If NOT logged in, then go to LoginActivity
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            finish();
+            return; // Stop executing the rest of this method
+        }
+
+        // If they ARE logged in, show the turf list
+        setContentView(R.layout.activity_main);
         recyclerView = findViewById(R.id.vendorRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         fetchVendors();
     }
 

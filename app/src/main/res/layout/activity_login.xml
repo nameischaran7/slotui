@@ -17,6 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="30dp"
+            android:fontFamily="sans-serif"
             android:text="S-BOOK"
             android:textColor="#6200EE"
             android:textSize="32sp"

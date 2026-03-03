@@ -19,4 +19,6 @@ public interface ApiService {
     Call<Slot> bookSlot(@Path("slotId") long slotId);
     @POST("api/users/login")
     Call<User> loginUser(@Body User user);
+    @POST("api/users/signup")
+    Call<User> signupUser(@Body User user);
 }

@@ -8,6 +8,7 @@ public class User {
     private String name;
     private String email;
     private String password;
+    private String role;
 
     // No-argument constructor (Required for Retrofit/Gson)
     public User() {}
@@ -30,4 +31,10 @@ public class User {
 
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
+    public void setRole(String role){
+        this.role=role;
+    }
+    public String getRole(){
+        return role;
+    }
 }
