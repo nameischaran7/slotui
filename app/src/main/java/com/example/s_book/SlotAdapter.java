@@ -1,5 +1,6 @@
 package com.example.s_book;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +13,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 public class SlotAdapter extends RecyclerView.Adapter<SlotAdapter.SlotViewHolder> {
     private List<Slot> slotList;
+    private OnSlotClickListener listener;
+    public interface OnSlotClickListener {
+        void onBookClick(Slot slot);
+    }
 
-    public SlotAdapter(List<Slot> slotList) { this.slotList = slotList; }
+    // Update constructor to take the listener
+    public SlotAdapter(List<Slot> slotList, OnSlotClickListener listener) {
+        this.slotList = slotList;
+        this.listener = listener;
+    }
 
     @NonNull
     @Override
@@ -29,20 +38,35 @@ public class SlotAdapter extends RecyclerView.Adapter<SlotAdapter.SlotViewHolder
     @Override
     public void onBindViewHolder(@NonNull SlotViewHolder holder, int position) {
         Slot slot = slotList.get(position);
-        // Format the time string (e.g., "2026-02-13T09:00:00" -> "09:00 AM")
-        holder.timeText.setText(slot.getStartTime().substring(11, 16));
 
-        if (slot.isBooked()) {
-            holder.bookBtn.setText("Occupied");
+        // 1. Force Visibility First
+        holder.bookBtn.setVisibility(View.VISIBLE);
+        holder.bookBtn.setAlpha(1.0f); // Ensure it's not transparent
+
+        if (listener == null) {
+            // VENDOR SIDE
             holder.bookBtn.setEnabled(false);
+            if (slot.isBooked()) {
+                holder.bookBtn.setText("Booked");
+                holder.bookBtn.setBackgroundColor(Color.RED);
+            } else {
+                holder.bookBtn.setText("Available");
+                holder.bookBtn.setBackgroundColor(Color.GREEN);
+            }
         } else {
-            holder.bookBtn.setOnClickListener(v -> {
-                // We'll add the booking logic here next!
-                Toast.makeText(v.getContext(), "Booking...", Toast.LENGTH_SHORT).show();
-            });
+            // USER SIDE
+            if (slot.isBooked()) {
+                holder.bookBtn.setText("Occupied");
+                holder.bookBtn.setEnabled(false);
+                holder.bookBtn.setBackgroundColor(Color.LTGRAY);
+            } else {
+                holder.bookBtn.setEnabled(true);
+                holder.bookBtn.setText("Book Now");
+                holder.bookBtn.setBackgroundColor(Color.BLUE);
+                holder.bookBtn.setOnClickListener(v -> listener.onBookClick(slot));
+            }
         }
     }
-    
     @Override
     public int getItemCount() { return slotList.size(); }
 
@@ -53,6 +77,7 @@ public class SlotAdapter extends RecyclerView.Adapter<SlotAdapter.SlotViewHolder
             super(itemView);
             timeText = itemView.findViewById(R.id.slotTime);
             bookBtn = itemView.findViewById(R.id.bookButton);
+
         }
     }
 }

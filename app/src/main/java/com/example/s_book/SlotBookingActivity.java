@@ -1,6 +1,7 @@
 package com.example.s_book;
-
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -52,15 +53,49 @@ public class SlotBookingActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Slot>> call, Response<List<Slot>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    // 3. Attach the data to the Adapter
-                    adapter = new SlotAdapter(response.body());
+                    // Pass the list AND a listener to the adapter
+                    adapter = new SlotAdapter(response.body(), slot -> {
+                        // Check if ID is null before calling the method
+                        if (slot != null && slot.getId() != null) {
+                            bookSelectedSlot(slot.getId());
+                        } else {
+                            Toast.makeText(SlotBookingActivity.this, "Error: Slot ID is missing!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                     recyclerView.setAdapter(adapter);
                 }
             }
-
             @Override
             public void onFailure(Call<List<Slot>> call, Throwable t) {
                 Toast.makeText(SlotBookingActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+    }
+    // Ensure it looks exactly like this:
+    private void bookSelectedSlot(long slotId) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://10.0.2.2:8010/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        ApiService apiService = retrofit.create(ApiService.class);
+        // Get the name from SharedPreferences
+        SharedPreferences pref = getSharedPreferences("SBook_Prefs", MODE_PRIVATE);
+        String currentUserName = pref.getString("name", "Unknown User");
+
+        apiService.bookSlot(slotId, currentUserName).enqueue(new Callback<Slot>() {
+            @Override
+            public void onResponse(Call<Slot> call, Response<Slot> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(SlotBookingActivity.this, "Booking Success!", Toast.LENGTH_SHORT).show();
+                    // This refreshes the list so the button turns into "Occupied"
+                    fetchSlots(getIntent().getLongExtra("VENDOR_ID", -1));
+                }
+            }
+            @Override
+            public void onFailure(Call<Slot> call, Throwable t) {
+                Toast.makeText(SlotBookingActivity.this, "Network error", Toast.LENGTH_SHORT).show();
             }
         });
     }
