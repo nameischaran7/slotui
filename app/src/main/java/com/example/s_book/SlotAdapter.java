@@ -38,16 +38,25 @@ public class SlotAdapter extends RecyclerView.Adapter<SlotAdapter.SlotViewHolder
     @Override
     public void onBindViewHolder(@NonNull SlotViewHolder holder, int position) {
         Slot slot = slotList.get(position);
-
+        if (slot.getStartTime() != null) {
+            // If the string is "2026-03-05 10:00:00", substring(11, 16) gives "10:00"
+            String fullTime = slot.getStartTime();
+            if (fullTime.length() > 16) {
+                holder.timeText.setText(fullTime.substring(11, 16));
+            } else {
+                holder.timeText.setText(fullTime);
+            }
+        }
         // 1. Force Visibility First
         holder.bookBtn.setVisibility(View.VISIBLE);
         holder.bookBtn.setAlpha(1.0f); // Ensure it's not transparent
 
-        if (listener == null) {
-            // VENDOR SIDE
+        if (listener == null) { // Vendor Side
             holder.bookBtn.setEnabled(false);
             if (slot.isBooked()) {
-                holder.bookBtn.setText("Booked");
+                // Show the name saved in the database
+                String bookedBy = slot.getBookedByName() != null ? slot.getBookedByName() : "User";
+                holder.bookBtn.setText("By: " + bookedBy);
                 holder.bookBtn.setBackgroundColor(Color.RED);
             } else {
                 holder.bookBtn.setText("Available");

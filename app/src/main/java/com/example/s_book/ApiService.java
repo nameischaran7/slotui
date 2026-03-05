@@ -8,6 +8,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface ApiService {
     @GET("api/vendors")
@@ -16,7 +17,7 @@ public interface ApiService {
     Call<List<Slot>> getSlotsByVendor(@Path("vendorId") long vendorId);
 
     @POST("api/slots/{slotId}/book")
-    Call<Slot> bookSlot(@Path("slotId") long slotId);
+    Call<Slot> bookSlot(@Path("slotId") long slotId, @Query("userName") String userName);
     @POST("api/users/login")
     Call<User> loginUser(@Body User user);
     @POST("api/users/signup")

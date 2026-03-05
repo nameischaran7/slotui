@@ -16,15 +16,24 @@
         android:textColor="#3F51B5" />
 
     <Button
+        android:id="@+id/manageSlotsBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="Manage My Slots" />
+        android:layout_marginTop="20dp"
+        android:text="Refresh Slots" />
 
-    <Button
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="View Bookings" />
+        android:layout_marginTop="20dp"
+        android:text="Current Bookings:"
+        android:textStyle="italic" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/vendorSlotsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="10dp" />
 
 </LinearLayout>
