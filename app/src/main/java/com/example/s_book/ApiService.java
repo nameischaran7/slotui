@@ -17,7 +17,7 @@ public interface ApiService {
     Call<List<Slot>> getSlotsByVendor(@Path("vendorId") long vendorId);
 
     @POST("api/slots/{slotId}/book")
-    Call<Slot> bookSlot(@Path("slotId") long slotId, @Query("userName") String userName);
+    Call<Slot> bookSlot(@Path("slotId") long slotId,@Body Slot slotDetails);
     @POST("api/users/login")
     Call<User> loginUser(@Body User user);
     @POST("api/users/signup")

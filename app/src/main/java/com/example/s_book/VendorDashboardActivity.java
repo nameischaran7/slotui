@@ -1,7 +1,9 @@
 package com.example.s_book;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +45,19 @@ public class VendorDashboardActivity extends AppCompatActivity {
         if (vendorId != -1) {
             fetchMySlots(vendorId);
         }
+        Button logoutBtn = findViewById(R.id.logoutButton);
+        logoutBtn.setOnClickListener(v -> {
+            // 1. Clear session
+            getSharedPreferences("SBook_Prefs", MODE_PRIVATE).edit().clear().apply();
+
+            // 2. Clear activity stack and go to Login
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+
+            Toast.makeText(this, "Logged out, mowa!", Toast.LENGTH_SHORT).show();
+            finish();
+        });
     }
 
     private void fetchMySlots(long vendorId) {

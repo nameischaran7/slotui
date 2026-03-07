@@ -1,4 +1,5 @@
 package com.example.s_book;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
@@ -40,6 +41,20 @@ public class SlotBookingActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Invalid Vendor ID", Toast.LENGTH_SHORT).show();
         }
+        // Inside onCreate
+        Button logoutBtn = findViewById(R.id.logoutButton);
+        logoutBtn.setOnClickListener(v -> {
+            // 1. Clear session
+            getSharedPreferences("SBook_Prefs", MODE_PRIVATE).edit().clear().apply();
+
+            // 2. Clear activity stack and go to Login
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+
+            Toast.makeText(this, "Logged out, mowa!", Toast.LENGTH_SHORT).show();
+            finish();
+        });
     }
 
     private void fetchSlots(long vendorId) {
@@ -82,9 +97,12 @@ public class SlotBookingActivity extends AppCompatActivity {
         ApiService apiService = retrofit.create(ApiService.class);
         // Get the name from SharedPreferences
         SharedPreferences pref = getSharedPreferences("SBook_Prefs", MODE_PRIVATE);
-        String currentUserName = pref.getString("name", "Unknown User");
-
-        apiService.bookSlot(slotId, currentUserName).enqueue(new Callback<Slot>() {
+       String currentUserName = pref.getString("name", "Unknown User");
+      //  String currentUserName="Charan";
+        Slot bookingRequest = new Slot();
+        bookingRequest.setBookedByName(currentUserName);
+        bookingRequest.setBooked(true);
+        apiService.bookSlot(slotId, bookingRequest).enqueue(new Callback<Slot>() {
             @Override
             public void onResponse(Call<Slot> call, Response<Slot> response) {
                 if (response.isSuccessful()) {
