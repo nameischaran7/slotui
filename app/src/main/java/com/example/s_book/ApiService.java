@@ -22,6 +22,6 @@ public interface ApiService {
     Call<User> loginUser(@Body User user);
     @POST("api/users/signup")
     Call<User> signupUser(@Body User user);
-    @POST("api/vendors")
+    @POST("api/vendors/signup")
     Call<Vendor> signupVendor(@Body Vendor vendor);
 }
