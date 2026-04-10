@@ -24,4 +24,6 @@ public interface ApiService {
     Call<User> signupUser(@Body User user);
     @POST("api/vendors/signup")
     Call<Vendor> signupVendor(@Body Vendor vendor);
+    @GET("api/vendors/search")
+    Call<List<Vendor>> searchVendors(@Query("query") String query);
 }

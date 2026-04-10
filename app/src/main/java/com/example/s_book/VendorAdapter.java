@@ -24,7 +24,10 @@ public class VendorAdapter extends RecyclerView.Adapter<VendorAdapter.VendorView
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_vendor, parent, false);
         return new VendorViewHolder(view);
     }
-
+    public void updateList(List<Vendor> newList) {
+        this.vendorList = newList;
+        notifyDataSetChanged(); // This tells the RecyclerView to redraw the cards
+    }
     @Override
     public void onBindViewHolder(@NonNull VendorViewHolder holder, int position) {
         Vendor vendor = vendorList.get(position);

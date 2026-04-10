@@ -3,6 +3,7 @@ package com.example.s_book;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -39,7 +40,54 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.vendorRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         fetchVendors();
+        EditText searchBar = findViewById(R.id.searchEditText);
+
+        searchBar.addTextChangedListener(new android.text.TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String query = s.toString();
+                // If user clears the search, fetch all vendors again
+                if (query.isEmpty()) {
+                    fetchVendors();
+                } else {
+                    // Otherwise, hit the new search endpoint in your Spring Boot app
+                    performSearch(query);
+                }
+            }
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void afterTextChanged(android.text.Editable s) {}
+        });
     }
+    private void performSearch(String query) {
+        // 1. Get your API Service (Ensure your RetrofitClient uses your PC's real IP!)
+        String BASE_URL = "http://10.0.2.2:8010/";
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        ApiService apiService = retrofit.create(ApiService.class);
+
+        // 2. Call the search endpoint we created in Spring Boot
+        apiService.searchVendors(query).enqueue(new Callback<List<Vendor>>() {
+            @Override
+            public void onResponse(Call<List<Vendor>> call, Response<List<Vendor>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    // 3. Update the adapter with the filtered results!
+                    adapter.updateList(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Vendor>> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "Search error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+
 
     private void fetchVendors() {
         // Use 10.0.2.2 for Emulator or your Laptop IP for Real Phone
