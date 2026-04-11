@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     }
     private void performSearch(String query) {
         // 1. Get your API Service (Ensure your RetrofitClient uses your PC's real IP!)
-        String BASE_URL = "http://10.0.2.2:8010/";
+        String BASE_URL = "https://slotbooking-ytuf.onrender.com";
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void fetchVendors() {
         // Use 10.0.2.2 for Emulator or your Laptop IP for Real Phone
-        String BASE_URL = "http://10.0.2.2:8010/";
+        String BASE_URL = "https://slotbooking-ytuf.onrender.com";
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)

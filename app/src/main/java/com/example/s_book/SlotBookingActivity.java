@@ -59,7 +59,7 @@ public class SlotBookingActivity extends AppCompatActivity {
 
     private void fetchSlots(long vendorId) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8010/")
+                .baseUrl("https://slotbooking-ytuf.onrender.com")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -91,7 +91,7 @@ public class SlotBookingActivity extends AppCompatActivity {
     // Ensure it looks exactly like this:
     private void bookSelectedSlot(long slotId) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8010/")
+                .baseUrl("https://slotbooking-ytuf.onrender.com")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         ApiService apiService = retrofit.create(ApiService.class);
