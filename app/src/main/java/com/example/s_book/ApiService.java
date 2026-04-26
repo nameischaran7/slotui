@@ -3,6 +3,8 @@ package com.example.s_book;
 import com.example.s_book.Vendor;
 
 import java.util.List;
+
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -31,4 +33,6 @@ public interface ApiService {
     Call<List<Vendor>> searchVendors(@Query("query") String query);
     @GET("api/slots/user/{userId}")
     Call<List<Slot>> getUserBookings(@Path("userId") long userId);
+    @POST("api/slots/{slotId}/verify-checkin")
+    Call<ResponseBody> verifyCheckIn(@Path("slotId") Long slotId);
 }
