@@ -3,8 +3,12 @@ package com.example.s_book;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
         // If they ARE logged in, show the turf list
         setContentView(R.layout.activity_main);
+        setSupportActionBar(findViewById(R.id.my_toolbar));
         recyclerView = findViewById(R.id.vendorRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         fetchVendors();
@@ -85,9 +90,40 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    @Override // Add this line
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
 
+    @Override // Add this line
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_my_bookings) {
+            startActivity(new Intent(this, MyBookingsActivity.class));
+            return true;
+        } else if (id == R.id.action_logout) {
+            performLogout();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
+    private void performLogout() {
+        // 1. Clear the saved User ID and Session data
+        SharedPreferences.Editor editor = getSharedPreferences("SBook_Prefs", MODE_PRIVATE).edit();
+        editor.clear();
+        editor.apply();
 
+        // 2. Show a quick message
+        Toast.makeText(this, "Logged out successfully", Toast.LENGTH_SHORT).show();
+
+        // 3. Redirect to Login Screen
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Clears activity stack
+        startActivity(intent);
+        finish(); // Closes MainActivity
+    }
 
     private void fetchVendors() {
         // Use 10.0.2.2 for Emulator or your Laptop IP for Real Phone
@@ -119,4 +155,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 }

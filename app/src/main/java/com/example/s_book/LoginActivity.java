@@ -22,6 +22,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SharedPreferences pref = getSharedPreferences("SBook_Prefs", MODE_PRIVATE);
+
         if (pref.getBoolean("isLoggedIn", false)) {
             // If already logged in, redirect based on role
             String role = pref.getString("role", "");
@@ -77,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
                     SharedPreferences.Editor editor = pref.edit();
 
                     // Use the 'editor' variable for everything
-                    editor.putLong("id", loggedInUser.getId());
+                    editor.putLong("userId", loggedInUser.getId());
                     editor.putString("name", loggedInUser.getName());
                     editor.putString("role", loggedInUser.getRole());
                     editor.putBoolean("isLoggedIn", true);

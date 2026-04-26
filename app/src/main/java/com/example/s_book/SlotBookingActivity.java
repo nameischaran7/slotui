@@ -57,6 +57,7 @@ public class SlotBookingActivity extends AppCompatActivity {
         });
     }
 
+
     private void fetchSlots(long vendorId) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://slotbooking-ytuf.onrender.com")
@@ -95,25 +96,31 @@ public class SlotBookingActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         ApiService apiService = retrofit.create(ApiService.class);
-        // Get the name from SharedPreferences
+
+        // 1. Get the User ID from SharedPreferences
         SharedPreferences pref = getSharedPreferences("SBook_Prefs", MODE_PRIVATE);
-       String currentUserName = pref.getString("name", "Unknown User");
-      //  String currentUserName="Charan";
-        Slot bookingRequest = new Slot();
-        bookingRequest.setBookedByName(currentUserName);
-        bookingRequest.setBooked(true);
-        apiService.bookSlot(slotId, bookingRequest).enqueue(new Callback<Slot>() {
+        long currentUserId = pref.getLong("userId", -1); // Use the key we synced earlier
+
+        // 2. Create a User object to send as the body
+        User userRequest = new User();
+        userRequest.setId(currentUserId);
+
+        // 3. Update the API call to pass the User object
+        apiService.bookSlot(slotId, userRequest).enqueue(new Callback<Slot>() {
             @Override
             public void onResponse(Call<Slot> call, Response<Slot> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(SlotBookingActivity.this, "Booking Success!", Toast.LENGTH_SHORT).show();
-                    // This refreshes the list so the button turns into "Occupied"
+                    Toast.makeText(SlotBookingActivity.this, "Booking Success, Mowa!", Toast.LENGTH_SHORT).show();
                     fetchSlots(getIntent().getLongExtra("VENDOR_ID", -1));
+                } else {
+                    // If it fails, show the error code (likely 400 or 500)
+                    Toast.makeText(SlotBookingActivity.this, "Failed: " + response.code(), Toast.LENGTH_SHORT).show();
                 }
             }
+
             @Override
             public void onFailure(Call<Slot> call, Throwable t) {
-                Toast.makeText(SlotBookingActivity.this, "Network error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SlotBookingActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

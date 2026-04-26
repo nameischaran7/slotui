@@ -38,6 +38,7 @@
         <activity
             android:name=".VendorDashboardActivity"
             android:exported="false" />
-
+        <activity android:name=".MyBookingsActivity"
+            android:exported="false" />
     </application>
 </manifest>

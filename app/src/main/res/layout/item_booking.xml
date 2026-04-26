@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    android:layout_margin="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/bookingVendorName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Turf Name"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/purple_500"/>
+
+        <TextView
+            android:id="@+id/bookingLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Location"
+            android:textColor="#757575"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#DDDDDD"
+            android:layout_marginVertical="8dp"/>
+
+        <TextView
+            android:id="@+id/bookingTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Timing Details"
+            android:textColor="#333333"/>
+        <Button
+            android:id="@+id/btnShowQR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Show QR"
+            android:backgroundTint="#6200EE"
+            android:layout_marginTop="8dp"/>
+        <TextView
+            android:id="@+id/bookingStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Confirmed"
+            android:textColor="#2ECC71"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
