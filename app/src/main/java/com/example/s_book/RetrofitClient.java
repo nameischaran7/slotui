@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClient {
     private static Retrofit retrofit;
     // For Emulator, 10.0.2.2 points to your laptop's localhost
-    private static final String BASE_URL = "https://slotbooking-ytuf.onrender.com";
+    private static final String BASE_URL = "https://slotbooking-ytuf.onrender.com/";
 
     public static Retrofit getRetrofitInstance() {
         if (retrofit == null) {

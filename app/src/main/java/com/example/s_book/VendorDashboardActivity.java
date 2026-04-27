@@ -93,11 +93,6 @@ public class VendorDashboardActivity extends AppCompatActivity {
             });
 
     private void fetchMySlots(long vendorId) {
-        // Reuse your Retrofit setup
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://slotbooking-ytuf.onrender.com")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
         ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
         apiService.getSlotsByVendor(vendorId).enqueue(new Callback<List<Slot>>() {
 
