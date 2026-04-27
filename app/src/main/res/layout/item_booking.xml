@@ -42,18 +42,36 @@
             android:layout_height="wrap_content"
             android:text="Timing Details"
             android:textColor="#333333"/>
-        <Button
-            android:id="@+id/btnShowQR"
-            android:layout_width="wrap_content"
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Show QR"
-            android:backgroundTint="#6200EE"
-            android:layout_marginTop="8dp"/>
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <Button
+                android:id="@+id/btnShowQR"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Show QR"
+                android:layout_marginEnd="4dp"
+                android:backgroundTint="#6200EE"/>
+
+            <Button
+                android:id="@+id/btnCancelBooking"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Cancel"
+                android:layout_marginStart="4dp"
+                android:backgroundTint="#E74C3C"/> </LinearLayout>
+
         <TextView
             android:id="@+id/bookingStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
             android:text="Confirmed"
             android:textColor="#2ECC71"
             android:textStyle="bold"/>

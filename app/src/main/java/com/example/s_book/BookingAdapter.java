@@ -1,14 +1,21 @@
 package com.example.s_book;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Response;
 
 public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingViewHolder> {
 
@@ -77,6 +84,43 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
             btnClose.setOnClickListener(view -> qrDialog.dismiss());
             qrDialog.show();
         });
+        // Inside onBindViewHolder
+        // Inside onBindViewHolder of BookingAdapter.java (The one used in My Bookings)
+        holder.btnCancel.setOnClickListener(v -> {
+            // GET THE FRESH POSITION
+            int currentPos = holder.getAdapterPosition();
+
+            // CHECK IF POSITION IS VALID (Avoids NoPosition errors)
+            if (currentPos != RecyclerView.NO_POSITION) {
+                Slot currentSlot = bookings.get(currentPos);
+                long slotId = currentSlot.getId();
+
+                RetrofitClient.getRetrofitInstance().create(ApiService.class)
+                        .cancelBooking(slotId).enqueue(new retrofit2.Callback<okhttp3.ResponseBody>() {
+                            @Override
+
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                // Log the code to see if it's 200, 404, or 500
+                                Log.d("CANCEL_CHECK", "Response Code: " + response.code());
+
+                                if (response.isSuccessful()) {
+                                    Toast.makeText(context, "Booking Cancelled!", Toast.LENGTH_SHORT).show();
+                                    bookings.remove(currentPos);
+                                    notifyItemRemoved(currentPos);
+                                    notifyItemRangeChanged(currentPos, bookings.size());
+                                } else {
+                                    // This will tell us if it's a 404 (Path wrong) or 500 (Server crash)
+                                    Toast.makeText(context, "Server Error: " + response.code(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<okhttp3.ResponseBody> call, Throwable t) {
+                                Toast.makeText(context, "Network Error!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            }
+        });
     }
 
     @Override
@@ -86,7 +130,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
 
     public static class BookingViewHolder extends RecyclerView.ViewHolder {
         TextView tvVendorName, tvTime, tvStatus, tvLocation;
-        Button btnShowQR;
+        Button btnShowQR,btnCancel;;
         public BookingViewHolder(@NonNull View itemView) {
             super(itemView);
             tvVendorName = itemView.findViewById(R.id.bookingVendorName);
@@ -94,6 +138,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
             tvStatus = itemView.findViewById(R.id.bookingStatus);
             tvLocation = itemView.findViewById(R.id.bookingLocation);
             btnShowQR = itemView.findViewById(R.id.btnShowQR);
+            btnCancel = itemView.findViewById(R.id.btnCancelBooking);
         }
     }
 }

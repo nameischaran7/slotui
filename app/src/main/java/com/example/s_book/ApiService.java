@@ -35,4 +35,6 @@ public interface ApiService {
     Call<List<Slot>> getUserBookings(@Path("userId") long userId);
     @POST("api/slots/{slotId}/verify-checkin")
     Call<ResponseBody> verifyCheckIn(@Path("slotId") long slotId);
+    @POST("api/slots/{slotId}/cancel")
+    Call<ResponseBody> cancelBooking(@Path("slotId") long slotId);
 }
